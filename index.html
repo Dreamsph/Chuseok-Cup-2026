@@ -1,11 +1,12 @@
-<!DOCTYPE html>
+
+html_content = '''<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chuseok Cup 2026 — Registration</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #0a0a0f;
@@ -27,7 +28,6 @@
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
-  --shadow: 0 4px 24px rgba(0,0,0,0.4);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,21 +40,39 @@ body {
   min-height: 100vh;
 }
 
-/* ===== HERO ===== */
+/* ===== HERO WITH BACKGROUND IMAGE ===== */
 .hero {
   position: relative;
   text-align: center;
-  padding: 80px 20px 60px;
-  background: linear-gradient(180deg, #0f0f1a 0%, var(--bg) 100%);
+  padding: 100px 20px 80px;
   overflow: hidden;
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
-.hero::before {
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: url('images/10211.jpg') center top / cover no-repeat;
+  z-index: 0;
+}
+.hero-bg::after {
   content: '';
   position: absolute;
-  top: -50%; left: -50%;
-  width: 200%; height: 200%;
-  background: radial-gradient(circle at 50% 30%, var(--accent-glow) 0%, transparent 50%);
-  pointer-events: none;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(10,10,15,0.3) 0%,
+    rgba(10,10,15,0.65) 40%,
+    rgba(10,10,15,0.92) 75%,
+    var(--bg) 100%
+  );
+}
+.hero-content {
+  position: relative;
+  z-index: 1;
 }
 .hero-badge {
   display: inline-block;
@@ -67,55 +85,85 @@ body {
   padding: 6px 16px;
   border-radius: 100px;
   margin-bottom: 20px;
+  background: rgba(10,10,15,0.6);
+  backdrop-filter: blur(4px);
 }
 .hero h1 {
-  font-size: clamp(36px, 6vw, 64px);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  margin-bottom: 8px;
-  background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: clamp(40px, 7vw, 72px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-bottom: 4px;
+  color: #fff;
+  text-shadow: 0 2px 24px rgba(0,0,0,0.5);
 }
 .hero .year {
-  font-size: clamp(48px, 8vw, 96px);
-  font-weight: 800;
+  font-size: clamp(56px, 9vw, 110px);
+  font-weight: 900;
   line-height: 1;
   color: transparent;
-  -webkit-text-stroke: 1.5px var(--accent);
+  -webkit-text-stroke: 2px var(--accent);
+  text-shadow: 0 0 40px rgba(232,197,71,0.3);
   margin-bottom: 16px;
 }
 .hero-tagline {
   font-size: 18px;
   color: var(--text-secondary);
   margin-bottom: 8px;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.5);
 }
 .hero-date {
   font-size: 14px;
   color: var(--text-tertiary);
   font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.5);
 }
 .hero-slogan {
   margin-top: 12px;
   font-size: 13px;
   color: var(--text-quaternary);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
+
+/* ===== VENUE BAR ===== */
+.venue-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px;
+  text-align: center;
+}
+.venue-bar-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.venue-bar-inner a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+.venue-bar-inner a:hover { text-decoration: underline; }
+.venue-icon { font-size: 16px; }
 
 /* ===== IMAGES BANNER ===== */
 .img-banner {
   display: flex;
   gap: 12px;
-  padding: 0 20px 40px;
+  padding: 40px 20px;
   justify-content: center;
   flex-wrap: wrap;
 }
 .img-banner img {
   width: 100%;
-  max-width: 320px;
-  height: 180px;
+  max-width: 360px;
+  height: 200px;
   object-fit: cover;
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
@@ -168,9 +216,7 @@ body {
   overflow: hidden;
   transition: transform 0.3s, border-color 0.3s;
 }
-.prize-card:hover {
-  transform: translateY(-4px);
-}
+.prize-card:hover { transform: translateY(-4px); }
 .prize-card.tennis { border-top: 3px solid var(--tennis); }
 .prize-card.pb-group { border-top: 3px solid var(--pb-group); }
 .prize-card.pb-single { border-top: 3px solid var(--pb-single); }
@@ -195,10 +241,7 @@ body {
   color: var(--accent);
   font-variant-numeric: tabular-nums;
 }
-.prize-icon {
-  font-size: 32px;
-  margin-bottom: 8px;
-}
+.prize-icon { font-size: 32px; margin-bottom: 8px; }
 
 /* ===== CATEGORY SELECTOR ===== */
 .cat-grid {
@@ -226,20 +269,9 @@ body {
   background: var(--surface-raised);
   box-shadow: 0 0 0 1px var(--accent), 0 8px 32px var(--accent-glow);
 }
-.cat-btn .cat-icon {
-  font-size: 36px;
-  margin-bottom: 12px;
-}
-.cat-btn h4 {
-  font-size: 15px;
-  font-weight: 600;
-  margin-bottom: 4px;
-  color: var(--text-primary);
-}
-.cat-btn p {
-  font-size: 12px;
-  color: var(--text-tertiary);
-}
+.cat-btn .cat-icon { font-size: 36px; margin-bottom: 12px; }
+.cat-btn h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; color: var(--text-primary); }
+.cat-btn p { font-size: 12px; color: var(--text-tertiary); }
 
 /* ===== FORM CARDS ===== */
 .card {
@@ -289,9 +321,7 @@ body {
   box-shadow: 0 0 0 3px var(--accent-glow);
 }
 .form-group input::placeholder,
-.form-group textarea::placeholder {
-  color: var(--text-quaternary);
-}
+.form-group textarea::placeholder { color: var(--text-quaternary); }
 .form-group input:read-only {
   background: var(--surface-raised);
   color: var(--text-tertiary);
@@ -348,6 +378,33 @@ body {
   border-color: var(--accent);
   color: var(--accent);
 }
+
+/* ===== BANK DETAILS ===== */
+.bank-card {
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.bank-card h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.bank-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.bank-row:last-child { border-bottom: none; }
+.bank-row .bank-label { color: var(--text-tertiary); }
+.bank-row .bank-value { color: var(--text-primary); font-weight: 500; }
 
 /* ===== PAYMENT ===== */
 .payment-options {
@@ -417,10 +474,33 @@ body {
   margin: 0;
   cursor: pointer;
 }
-.checkbox-group label strong {
-  color: var(--text-primary);
-  font-weight: 600;
+.checkbox-group label strong { color: var(--text-primary); font-weight: 600; }
+
+/* ===== CONTACT BAR ===== */
+.contact-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
 }
+.contact-bar .contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.contact-bar .contact-item a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.contact-bar .contact-item a:hover { text-decoration: underline; }
 
 /* ===== SUBMIT ===== */
 .submit-btn {
@@ -455,10 +535,7 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
 }
-.success-card .success-icon {
-  font-size: 64px;
-  margin-bottom: 16px;
-}
+.success-card .success-icon { font-size: 64px; margin-bottom: 16px; }
 .success-card h2 {
   font-size: 24px;
   font-weight: 600;
@@ -527,8 +604,10 @@ body {
   .member-row { grid-template-columns: 1fr; gap: 4px; }
   .member-header { display: none; }
   .payment-options { grid-template-columns: 1fr; }
-  .hero { padding: 60px 16px 40px; }
+  .hero { padding: 80px 16px 60px; min-height: 360px; }
   .container { padding: 0 16px 60px; }
+  .contact-bar { flex-direction: column; align-items: flex-start; }
+  .venue-bar-inner { flex-direction: column; gap: 4px; }
 }
 
 /* ===== FOOTER ===== */
@@ -551,25 +630,50 @@ body {
   <div class="loading-text">Submitting your registration...</div>
 </div>
 
-<!-- ===== HERO ===== -->
+<!-- ===== HERO WITH BANNER BACKGROUND ===== -->
 <section class="hero">
-  <div class="hero-badge">Hmart Presents</div>
-  <h1>Chuseok Cup</h1>
-  <div class="year">2026</div>
-  <div class="hero-tagline">Tennis & Pickleball Tournament</div>
-  <div class="hero-date">September 24 – 25, 2026 &nbsp;|&nbsp; Mixed Open Tournament</div>
-  <div class="hero-slogan">Play. Gather. Celebrate.</div>
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Hmart Presents</div>
+    <h1>Chuseok Cup</h1>
+    <div class="year">2026</div>
+    <div class="hero-tagline">Tennis & Pickleball Tournament</div>
+    <div class="hero-date">September 24 – 25, 2026 &nbsp;|&nbsp; Mixed Open Tournament</div>
+    <div class="hero-slogan">Play. Gather. Celebrate.</div>
+  </div>
 </section>
 
-<!-- ===== IMAGES ===== -->
+<!-- ===== VENUE BAR ===== -->
+<div class="venue-bar">
+  <div class="venue-bar-inner">
+    <span class="venue-icon">📍</span>
+    <span><strong>Venue:</strong> Cecile Tennis Club, Dapdap, Lapu-Lapu City</span>
+    <span style="color:var(--text-quaternary)">(near Crimson Resort & Spa)</span>
+    <span>•</span>
+    <a href="https://share.google/2iR6rEVNekmabLK5a" target="_blank" rel="noopener">View on Map →</a>
+  </div>
+</div>
+
+<!-- ===== IMAGES BANNER ===== -->
 <div class="img-banner">
-  <img src="images/10211.jpg" alt="Chuseok Cup Banner" onerror="this.style.display='none'">
   <img src="images/10212.jpg" alt="Chuseok Cup Poster" onerror="this.style.display='none'">
   <img src="images/10213.jpg" alt="Chuseok Cup Header" onerror="this.style.display='none'">
 </div>
 
 <!-- ===== MAIN CONTENT ===== -->
 <div class="container">
+
+  <!-- Contact Info Bar -->
+  <div class="contact-bar">
+    <div class="contact-item">
+      <span>📧</span>
+      <span>Questions? <a href="mailto:cebuhmartmktng@gmail.com">cebuhmartmktng@gmail.com</a></span>
+    </div>
+    <div class="contact-item">
+      <span>🏦</span>
+      <span>Metrobank • H-Mart Philippines Commercial Inc</span>
+    </div>
+  </div>
 
   <!-- Prizes -->
   <div class="section-title">Prize Pool</div>
@@ -706,9 +810,27 @@ body {
     <div id="payment-section" class="hidden">
       <div class="card">
         <div class="card-title">💳 Entry Fee Payment</div>
+
+        <!-- Bank Details -->
+        <div class="bank-card">
+          <h4>🏦 Bank Transfer Details</h4>
+          <div class="bank-row">
+            <span class="bank-label">Bank Name</span>
+            <span class="bank-value">Metrobank</span>
+          </div>
+          <div class="bank-row">
+            <span class="bank-label">Account Name</span>
+            <span class="bank-value">H-Mart Philippines Commercial Inc</span>
+          </div>
+          <div class="bank-row">
+            <span class="bank-label">Account No.</span>
+            <span class="bank-value" style="font-family:monospace;letter-spacing:0.05em">1857185554429</span>
+          </div>
+        </div>
+
         <div class="payment-options">
           <div class="pay-opt" data-pay="cash" onclick="selectPay('cash')">
-            <div class="pay-icon">💵 </div>
+            <div class="pay-icon">💵</div>
             <div class="pay-label">Cash</div>
           </div>
           <div class="pay-opt" data-pay="receipts" onclick="selectPay('receipts')">
@@ -779,6 +901,9 @@ body {
     <div class="success-icon">🏆</div>
     <h2>Registration Submitted!</h2>
     <p>Thank you for registering for Chuseok Cup 2026.<br>We will contact you via email with further details.</p>
+    <p style="margin-top:12px;font-size:13px;color:var(--text-tertiary)">
+      Questions? Email us at <a href="mailto:cebuhmartmktng@gmail.com" style="color:var(--accent)">cebuhmartmktng@gmail.com</a>
+    </p>
     <button type="button" class="reset-btn" onclick="resetForm()">Register Another Entry</button>
   </div>
 
@@ -786,13 +911,14 @@ body {
 
 <!-- ===== FOOTER ===== -->
 <div class="footer">
-  <p>Chuseok Cup 2026 — Presented by Hmart</p>
-  <p style="margin-top:4px;">Play. Gather. Celebrate.</p>
+  <p><strong>Chuseok Cup 2026</strong> — Presented by Hmart</p>
+  <p style="margin-top:4px;">📍 Cecile Tennis Club, Dapdap, Lapu-Lapu City &nbsp;|&nbsp; 📧 <a href="mailto:cebuhmartmktng@gmail.com">cebuhmartmktng@gmail.com</a></p>
+  <p style="margin-top:8px;color:var(--text-quaternary)">Play. Gather. Celebrate.</p>
 </div>
 
 <script>
 // ============================================================
-// CONFIG: Replace this with your Google Apps Script Web App URL
+// CONFIG: Replace with your Google Apps Script Web App URL
 // ============================================================
 const GAS_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
 // ============================================================
@@ -871,20 +997,16 @@ function handleFileSelect(input) {
     uploadedFileBase64 = null;
     return;
   }
-
-  // Validate file size (max 5MB)
   if (file.size > 5 * 1024 * 1024) {
     alert('File too large. Maximum size is 5MB.');
     input.value = '';
     return;
   }
-
   uploadedFileName = file.name;
   uploadedFileType = file.type;
-
   const reader = new FileReader();
   reader.onload = function(e) {
-    uploadedFileBase64 = e.target.result.split(',')[1]; // Remove data URI prefix
+    uploadedFileBase64 = e.target.result.split(',')[1];
     textEl.textContent = file.name;
     textEl.className = 'upload-filename';
   };
@@ -900,11 +1022,7 @@ function gatherFormData() {
   const fd = new FormData(form);
   const data = {};
   fd.forEach((v, k) => { if (v) data[k] = v; });
-
-  // Category
   data.category = currentCat;
-
-  // Collect all members for group
   if (currentCat === 'tennis-group' || currentCat === 'pb-group') {
     data.members = [];
     for (let i = 1; i <= memberCount; i++) {
@@ -917,43 +1035,31 @@ function gatherFormData() {
     }
     data.members_json = JSON.stringify(data.members);
   }
-
-  // File info
   if (uploadedFileBase64) {
     data.file_base64 = uploadedFileBase64;
     data.file_name = uploadedFileName;
     data.file_type = uploadedFileType;
   }
-
-  // Timestamp
   data.submitted_at = new Date().toISOString();
-
   return data;
 }
 
 async function handleSubmit(e) {
   e.preventDefault();
-
-  // Validate payment method
   if (!document.getElementById('payment-method').value) {
     alert('Please select a payment method (Cash or Receipts).');
     return false;
   }
-
-  // Validate proof upload for cash
   if (document.getElementById('payment-method').value === 'cash' && !uploadedFileBase64) {
     alert('Please upload proof of payment for cash payments.');
     return false;
   }
-
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
   btn.textContent = 'Submitting...';
   showLoading(true);
-
   const data = gatherFormData();
 
-  // If GAS_URL is not set, show demo mode
   if (GAS_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
     setTimeout(() => {
       showLoading(false);
@@ -974,7 +1080,6 @@ async function handleSubmit(e) {
       headers: { 'Content-Type': 'application/json' }
     });
     const result = await response.json();
-
     showLoading(false);
     if (result.success) {
       document.getElementById('reg-form').classList.add('hidden');
@@ -985,9 +1090,8 @@ async function handleSubmit(e) {
     }
   } catch (err) {
     showLoading(false);
-    alert('Network error. Please check your connection and try again.\n' + err.message);
+    alert('Network error. Please check your connection and try again.\\n' + err.message);
   }
-
   btn.disabled = false;
   btn.textContent = 'Submit Registration';
   return false;
@@ -1010,7 +1114,6 @@ function resetForm() {
   document.getElementById('upload-text').textContent = 'Click or drag to upload screenshot / photo of payment';
   document.getElementById('upload-text').className = 'upload-text';
   document.getElementById('proof-file').value = '';
-
   const container = document.getElementById('members-container');
   while (container.children.length > 3) {
     container.removeChild(container.lastChild);
@@ -1021,10 +1124,10 @@ function resetForm() {
   uploadedFileName = null;
   uploadedFileType = null;
   currentCat = null;
-
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 </script>
 
 </body>
 </html>
+
