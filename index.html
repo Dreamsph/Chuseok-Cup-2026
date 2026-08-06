@@ -1280,7 +1280,7 @@
             </div>
             <div class="pay-opt" data-pay="receipts" onclick="selectPay('receipts')">
               <div class="pay-icon">🧾</div>
-              <div class="pay-label">HMart Receipts after Upload. Please visit our store to verify your existing Recipts</div>
+              <div class="pay-label">HMart Receipts</div>
             </div>
           </div>
           <input type="hidden" name="payment_method" id="payment-method">
@@ -1304,8 +1304,8 @@
 
           <!-- Cash Details -->
           <div id="cash-details" class="bank-card hidden">
-            <h4>💵 Cash Payment </h4>
-            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;">Please visit our store to pay in cash Or verify your existing Recipts. <strong>Do not upload a receipt here.</strong></p>
+            <h4>💵 Cash Payment Instructions</h4>
+            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;">Please visit our store to pay in cash. <strong>Do not upload a receipt here.</strong></p>
             <div class="bank-row">
               <span class="bank-label">Store</span>
               <span class="bank-value">HMart</span>
@@ -1316,8 +1316,14 @@
             </div>
             <div class="bank-row">
               <span class="bank-label">Mobile</span>
-              <span class="bank-value">09603273419</span>
+              <span class="bank-value">0960 327 3419</span>
             </div>
+          </div>
+
+          <!-- Receipts Details -->
+          <div id="receipts-details" class="bank-card hidden">
+            <h4>🧾 HMart Receipts</h4>
+            <p>Please visit the HMart and verify your HMart receipts at the store counter. <strong>Do not upload a receipt here.</strong></p>
           </div>
 
           <div id="proof-upload" class="hidden">
@@ -1415,7 +1421,7 @@
     // ============================================================
     // CONFIG: Replace with your Google Apps Script Web App URL
     // ============================================================
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwpHYEEtblLdhGTBDRaxlBnrpJnxyityNuqoo6-78rl4_Pzt1RK88tNVQrpX1ewLsVx/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzYjAz4ZBwVs1OgETLvy9XuMy5uj4DJzCpAaowkxsDyYWaUEc_p_TDf8YYVJsSMPLs/exec';
     // ============================================================
 
     let currentCat = null;
@@ -1466,9 +1472,18 @@
       const targetCount = cat === 'tennis-group' ? 10 : 3;
       const isTennis = cat === 'tennis-group';
       
+      const header = document.querySelector('.member-header');
+      if (isTennis) {
+        header.innerHTML = `<span>Full Name</span><span>Age</span><span>T-Shirt</span><span>Skill</span>`;
+        if (window.innerWidth > 640) header.style.gridTemplateColumns = '1fr 60px 75px 75px';
+      } else {
+        header.innerHTML = `<span>Full Name</span><span>Age</span><span>T-Shirt</span>`;
+        if (window.innerWidth > 640) header.style.gridTemplateColumns = '1fr 70px 90px';
+      }
+      
       for (let i = 0; i < targetCount; i++) {
         const isRequired = isTennis || i < 2;
-        addMemberRow(isRequired);
+        addMemberRow(isRequired, isTennis);
       }
       updateAddMemberBtn();
     }
@@ -1481,16 +1496,30 @@
     function addMember() {
       const maxMembers = currentCat === 'tennis-group' ? 10 : 8;
       if (memberCount >= maxMembers) return;
-      addMemberRow(false);
+      addMemberRow(false, currentCat === 'tennis-group');
       updateAddMemberBtn();
     }
 
-    function addMemberRow(isRequired) {
+    function addMemberRow(isRequired, isTennis) {
       memberCount++;
       const container = document.getElementById('members-container');
       const row = document.createElement('div');
       row.className = 'member-row';
+      if (window.innerWidth > 640) {
+        row.style.gridTemplateColumns = isTennis ? '1fr 60px 75px 75px' : '1fr 70px 90px';
+      }
       const reqStr = isRequired ? 'required' : '';
+      
+      let skillDropdown = '';
+      if (isTennis) {
+        skillDropdown = `
+        <select name="member_skill_${memberCount}" ${reqStr}>
+          <option value="">Skill</option>
+          <option value="C">C</option>
+          <option value="C+">C+</option>
+        </select>`;
+      }
+
       row.innerHTML = `
     <input type="text" name="member_name_${memberCount}" placeholder="Member ${memberCount} name" ${reqStr}>
     <input type="number" name="member_age_${memberCount}" placeholder="Age" min="10" max="99" ${reqStr}>
@@ -1498,6 +1527,7 @@
       <option value="">Size</option>
       <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
     </select>
+    ${skillDropdown}
   `;
       container.appendChild(row);
     }
@@ -1511,12 +1541,16 @@
       
       const isCash = method === 'cash';
       const isBank = method === 'bank';
+      const isReceipts = method === 'receipts';
       
       document.getElementById('bank-details').classList.toggle('hidden', !isBank);
       document.getElementById('cash-details').classList.toggle('hidden', !isCash);
-      document.getElementById('proof-upload').classList.toggle('hidden', isCash);
+      document.getElementById('receipts-details').classList.toggle('hidden', !isReceipts);
       
-      if (isCash) {
+      // Only bank requires a file upload
+      document.getElementById('proof-upload').classList.toggle('hidden', !isBank);
+      
+      if (!isBank) {
         uploadedFileBase64 = null;
         uploadedFileName = null;
         uploadedFileType = null;
@@ -1524,9 +1558,7 @@
         document.getElementById('upload-text').className = 'upload-text';
         document.getElementById('proof-file').value = '';
       } else {
-        document.getElementById('upload-label').innerHTML = method === 'bank' 
-          ? 'Proof of Bank Transfer <span class="req">*</span>' 
-          : 'HMart Receipts Photo <span class="req">*</span>';
+        document.getElementById('upload-label').innerHTML = 'Proof of Bank Transfer <span class="req">*</span>';
       }
     }
 
@@ -1571,8 +1603,11 @@
           const name = fd.get(`member_name_${i}`);
           const age = fd.get(`member_age_${i}`);
           const size = fd.get(`member_size_${i}`);
+          const skill = fd.get(`member_skill_${i}`);
           if (name && age && size) {
-            data.members.push({ name, age, size });
+            let memberData = { name, age, size };
+            if (skill) memberData.skill = skill;
+            data.members.push(memberData);
           }
         }
         data.members_json = JSON.stringify(data.members);
@@ -1592,8 +1627,8 @@
         alert('Please select a payment method.');
         return false;
       }
-      if (document.getElementById('payment-method').value !== 'cash' && !uploadedFileBase64) {
-        alert('Please upload a proof of payment or HMart receipt.');
+      if (document.getElementById('payment-method').value === 'bank' && !uploadedFileBase64) {
+        alert('Please upload a proof of bank transfer.');
         return false;
       }
       const btn = document.getElementById('submit-btn');
